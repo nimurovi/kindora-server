@@ -208,18 +208,7 @@ app.get('/get-event/:email', async (req, res) => {
     res.send(result)
 })
 
-// app.patch('/update-event/:email', async (req, res) => {
-//     const email = req.params.email;
-//     const updateData = req.body;
-//     const result = await eventsCollection.updateOne({creatorEmail: email}, {$set: updateData});
-//     res.send(result);
-// });
-
-// app.delete('/delete-event/:email', async (req, res) => {
-//     const email = req.params.email;
-//     const result = await eventsCollection.deleteOne({creatorEmail: email});
-//     res.send(result);
-// });
+ 
 
 
 app.patch('/update-event/:email', async (req, res) => {
