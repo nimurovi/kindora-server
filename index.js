@@ -35,6 +35,36 @@ const eventsCollection = db.collection("events")
 // http://localhost:8000/my-joined-events
 const joinedEventsCollection = db.collection("joinedEvents");
 
+app.get("/recent-upcoming-events", async (req, res) => {
+    try {
+        // Current date in Bangladesh (YYYY-MM-DD)
+        const today = new Date().toLocaleDateString("en-CA", {
+            timeZone: "Asia/Dhaka",
+        });
+
+        const result = await eventsCollection
+            .find({
+                eventDate: {
+                    $gte: today,
+                },
+            })
+            .sort({
+                eventDate: 1,
+            })
+            .limit(6)
+            .toArray();
+
+        res.status(200).send(result);
+
+    } catch (error) {
+        console.error("Recent upcoming events error:", error);
+
+        res.status(500).send({
+            message: "Failed to fetch upcoming events.",
+        });
+    }
+});
+
 // Prevent duplicate registrations
 await joinedEventsCollection.createIndex(
     { eventId: 1, userId: 1 },
@@ -101,7 +131,7 @@ app.get("/my-joined-events", async (req, res) => {
         });
     }
 });
- 
+
 
 app.post("/join-event", async (req, res) => {
     try {
@@ -195,12 +225,12 @@ app.get("/get-event-by-id/:id", async (req, res) => {
     }
 });
 
- 
+
 app.post('/create-event', async (req, res) => {
 
     const data = req.body;
     const result = await eventsCollection.insertOne(data);
-     
+
     res.send(result)
 })
 
@@ -213,7 +243,7 @@ app.get('/get-event/:email', async (req, res) => {
     res.send(result)
 })
 
- 
+
 
 
 app.patch('/update-event/:email', async (req, res) => {
