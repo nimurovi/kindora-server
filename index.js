@@ -195,13 +195,7 @@ app.get("/get-event-by-id/:id", async (req, res) => {
     }
 });
 
-app.post('/create-event', async (req, res) => {
-    const data = req.body;
-    const result = await eventsCollection.insertOne(data);
-    console.log(result)
-    res.send(result)
-})
-
+//post event
 app.get('/get-event/:email', async (req, res) => {
     const email = req.params.email;
     const result = await eventsCollection.find({ creatorEmail: email }).toArray();
