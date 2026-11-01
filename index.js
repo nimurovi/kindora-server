@@ -40,10 +40,15 @@ await joinedEventsCollection.createIndex(
     { eventId: 1, userId: 1 },
     { unique: true }
 );
-
 app.get("/my-joined-events", async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.query.userId;
+
+        if (!userId) {
+            return res.status(400).send({
+                message: "User ID is required."
+            });
+        }
 
         const joinedEvents = await joinedEventsCollection.aggregate([
             {
@@ -92,7 +97,7 @@ app.get("/my-joined-events", async (req, res) => {
         console.error("Get joined events error:", error);
 
         res.status(500).send({
-            message: "Failed to fetch joined events.",
+            message: "Failed to fetch joined events."
         });
     }
 });
