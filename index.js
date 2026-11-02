@@ -7,7 +7,7 @@ import { createRemoteJWKSet } from 'jose';
 import { jwtVerify } from 'jose';
 const app = express()
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL,
     credentials: true
 }));
 app.use(express.json())
@@ -44,7 +44,7 @@ const verifyApi = async (req, res, next) => {
         return res.status(401).send({ message: "Invalid token" });
     }
 
-    const JWKS = createRemoteJWKSet(new URL('http://localhost:3000/api/auth/jwks'));
+    const JWKS = createRemoteJWKSet(new URL(`${process.env.CLIENT_URL}/api/auth/jwks`));
     try {
         const { payload } = await jwtVerify(token, JWKS);
         console.log("JWT payload:", payload);
@@ -358,3 +358,5 @@ const verifyApi = async (req, res, next) => {
     app.listen(port, () => {
         console.log(`server is listening on port ${port}`)
     })
+
+    export default app
