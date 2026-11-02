@@ -30,11 +30,7 @@ export async function connectToMongoDB() {
 const mongoClient = await connectToMongoDB();
 const db = mongoClient.db("kindora")
 const eventsCollection = db.collection("events")
-// http://localhost:8000/get-events
-// http://localhost:8000/get-event/:email
-// http://localhost:8000/update-event/:email
-// http://localhost:8000/delete-event/:email
-// http://localhost:8000/my-joined-events
+ 
 const joinedEventsCollection = db.collection("joinedEvents");
 
 
@@ -63,7 +59,7 @@ const verifyApi = async (req, res, next) => {
 
     app.get("/recent-upcoming-events", async (req, res) => {
         try {
-            // Current date in Bangladesh (YYYY-MM-DD)
+            
             const today = new Date().toLocaleDateString("en-CA", {
                 timeZone: "Asia/Dhaka",
             });
@@ -91,7 +87,7 @@ const verifyApi = async (req, res, next) => {
         }
     });
 
-    // Prevent duplicate registrations
+ 
     await joinedEventsCollection.createIndex(
         { eventId: 1, userId: 1 },
         { unique: true }
@@ -186,7 +182,7 @@ const verifyApi = async (req, res, next) => {
                 });
             }
 
-            // Check whether this user already joined
+          
             const existingJoin = await joinedEventsCollection.findOne({
                 eventId,
                 userId: user.id,
